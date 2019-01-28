@@ -1,0 +1,82 @@
+
+							
+
+
+
+
+
+
+
+
+
+		
+
+{% load static from staticfiles %}
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'ebookstore/login.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'ebookstore/bootstrap.min.css' %}">
+		</head>
+		<body>
+		<div class="top">
+			
+		</div>
+		
+				<div class = 'quote'>
+						
+					
+				
+				
+					
+					<div class='loginbox'>
+										<form method="POST"  action="">
+								{% csrf_token %}
+										{{form.as_p}}
+										
+										{% if request.GET.next %}
+											<input type="hidden" name="next"  value="{{request.GET.next}}">
+										{% endif %}
+								
+								<button type='submit' class='btn btn-success log'><h4>Sign up</h4></button>
+								
+							
+						</form>
+						<div class='instr'>
+						
+					</div>
+					</div>
+				</div>		
+			
+		
+		
+		
+		
+		
+		</body>
+</html>		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

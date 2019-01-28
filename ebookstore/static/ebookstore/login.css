@@ -1,0 +1,129 @@
+body{
+	background-image:url(back.jpg);
+	background-repeat:   no-repeat;
+	background-image-size:cover;
+	background-attachment: fixed;
+	font-family:Bahnschrift;
+	
+}
+header{
+	margin-bottom:150px;
+	color:blue;
+	padding-left:30px
+	
+	width:400px;
+}
+.logo{
+	height:150px;
+	 width:600px;
+	 margin-top:-30px;
+}
+.instr{
+	margin-left: 5px;
+
+}
+.top{
+	margin-bottom: 20px;
+}
+.instr a{
+	color:black;
+}
+
+.loginbox input[type="text"],input[type="password"]{
+	border:none;
+	background-color:white;
+	border-radius:3px;
+	padding:10px;
+	font-family:Bahnschrift;
+	width:600px;
+	margin-right: 300px;
+	height:50px;
+	outline:none;
+	color:black;
+	font-size:16px;
+}
+div.loginbox {
+	color:black;
+	margin-right: 90px;
+}
+.log{
+	width:600px;
+	height:50px;
+	margin-left: 5px;
+}
+.quote{
+	margin-left: 400px;
+}
+
+.quote h2{
+	line-height:1.5em;
+	font-weight:bold;
+	margin-left: 200px;
+}
+
+@media only screen and (max-width: 480px) {
+	.quote h2{
+	line-height:1.5em;
+	font-weight:bold;
+	margin-left: 20px;
+	font-size:25px;
+	width:300px;
+}
+header{
+	margin-bottom:30px;
+	color:blue;
+	padding-left:30px;
+}
+div.loginbox {
+	color:white;
+	margin-left: 30px;
+}
+body h3{
+	margin-left: 
+	
+}
+.logo{
+	height:150px;
+	 width:220px;
+	 margin-top:-30px;
+}
+body{
+	background-image:url(back1.jpg);
+	background-repeat:   no-repeat;
+	background-image-size:cover;
+	background-attachment: fixed;
+	font-family:Bahnschrift;
+	
+}
+.quote{
+	margin-left: 4px;
+}
+.loginbox input[type="text"],input[type="password"]{
+	border:none;
+	background-color:white;
+	border-radius:3px;
+	padding:10px;
+	font-family:Bahnschrift;
+	width:300px;
+	margin-right: 0;
+	height:50px;
+	outline:none;
+	color:black;
+	font-size:16px;
+}
+.log{
+	width:300px;
+	height:50px;
+	margin-left: 5px;
+}
+header{
+	margin-bottom:100px;
+	color:blue;
+	padding-left:30px;
+}
+div.loginbox {
+	color:black;
+	margin-right: 0;
+}
+
+}

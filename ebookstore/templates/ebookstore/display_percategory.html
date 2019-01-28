@@ -1,0 +1,120 @@
+
+
+
+
+{% load static from staticfiles %} 
+
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'ebookstore/cat.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+					  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'ebookstore/bootstrap.min.css' %}">
+									
+									
+									<script>
+					function openNav() {
+						document.getElementById("mySidenav").style.width = "250px";
+					}
+
+					function closeNav() {
+						document.getElementById("mySidenav").style.width = "0";
+					}
+					
+										var slideIndex = 1;
+					showSlides(slideIndex);
+					</script>
+		</head>
+		<body>
+		<header>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			
+			
+			
+			<div id="mySidenav" class="sidenav">
+					  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+					 <h1> <a href="{% url 'ebookstore:displaycategory' %}">HOME</a></h1>
+					   {% for categories in category %}
+		
+		
+
+						<h1><a href='{% url "ebookstore:display_percategory" categories.id %}'>{{ categories.name }}</a></h1>
+						{% endfor %}
+					
+					  
+			</div>
+			<div class="search-box">
+				<form method ='GET' action=''>
+					<p><input type="text" class="search-text"  placeholder="search for Products,brands and categories..." name="q" value= "{{ request.GET.q }}" > 
+				<input type="submit" value="search" class='searchbtn'></p>
+			</form>
+			</div>
+			<div class='cart'>
+			<a href="{% url 'ebookstore:Salesrequest' %}"><i class="fas fa-store-alt las"></i></a>
+			<a href="{% url 'ebookstore:userfavourite_products' %}"><i class="fas fa-heart lg"></i></a>		
+			<a href="{% url 'ebookstore:userprofile' %}"><i class="fas fa-user lgr"></i></a>
+			
+			<a href="{% url 'ebookstore:carthome' %}"><i class="fas fa-shopping-cart las"></i></a>
+			<a href="{% url 'ebookstore:complain' %}"  ><i class="fas fa-headset lg"></i></a>	
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</header>
+		<div class='container'>
+				{% for sub in cot %}
+
+		<h1><span style=" color:blue" >{{ sub.name }}</span></h1>
+		{% endfor %}
+		<hr/>
+	</div>
+
+		<div class='container'>
+			
+			<div class='row'>
+				{% for product in product_cat %}
+				<div class='col-sm-3'>
+				
+					<img src='{{ product.Product_image.url}}' class='img-rounded pic1' />
+						<h3 >{{ product.Product_name}}</h3>
+							<h3>&#8358;{{ product.Product_price}}</h3>
+							<h4>{{ product.Product_store}}</h4>
+							
+							<a href='{% url "ebookstore:product_detail" product.id %}'><h4><button type='button' class='btn btn-success'>
+								<span style=" color:white" >view  details</span>
+							</button></h4></a>
+							
+						
+				</div>
+				{% endfor %}
+			</div>	
+					
+			
+		</div>
+
+
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		</body>
+		</html>
