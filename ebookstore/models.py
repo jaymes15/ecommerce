@@ -12,6 +12,7 @@ from django.db.models.signals import pre_save,post_save,m2m_changed
 
 
 
+
 # Create your models here.
 
 
@@ -94,7 +95,9 @@ class CartItem(models.Model):
 	product = models.ForeignKey('Product',on_delete=models.CASCADE)
 	order = models.ForeignKey('Order',  null=True, blank=True,  on_delete=models.CASCADE)
 
-	store = models.ForeignKey('Stores',on_delete=models.CASCADE,null=True,blank=True)
+	#store = models.ForeignKey('Stores',on_delete=models.CASCADE,null=True,blank=True)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
+
 	variations = models.ManyToManyField('Variation',null=True,blank=True)
 	quantity = models.PositiveIntegerField(default=1)
 	line_total =models.DecimalField(default=0.00, max_digits=65, decimal_places=2)
@@ -179,15 +182,14 @@ class Product(models.Model):
 	Product_price = models.DecimalField(decimal_places=2,max_digits=10)
 	likes = models.ManyToManyField(User,related_name='likes',blank=True)
 	favourite = models.ManyToManyField(User,related_name='favourite',blank=True)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
 
 	Product_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-	Product_store = models.ForeignKey(Stores,on_delete=models.CASCADE)
+	#Product_store = models.ForeignKey(Stores,on_delete=models.CASCADE)
 	created_on = models.DateTimeField(auto_now_add=True,blank=True,null=True)
 
 
-	def get_absolute_url(self):
-	        	return reverse('ebookstore:product_detail',kwargs={'pk': self.pk})
-
+	
 
 	def total_likes(self):
 	        		return self.likes.count()	
@@ -204,12 +206,13 @@ class UserProfile(models.Model):
 	gender = models.CharField(max_length=6,choices=(('Male','Male'),('Female','Female')),blank=True)
 	age = models.PositiveIntegerField(blank=True,null=True)
 	address = models.CharField(max_length=2000,default='')
+	location = models.CharField(max_length=2000,default='',null=False,blank=False)
 	city = models.CharField(max_length=100,default='')
 	phone_number = models.CharField(max_length=16,default='')
 	order = models.ForeignKey('Order', null=True, blank=True,  on_delete=models.CASCADE)
 
 	#website = models.URLField(default='')
-	#image = models.ImageField(upload_to='profile_image',blank=True)
+	image = models.ImageField(upload_to='profile_image',blank=True,null=True)
 	def __str__(self):
 		return self.user.username
 
@@ -251,7 +254,8 @@ class Variation(models.Model):
 	title = models.CharField(max_length=120)
 	updated = models.DateTimeField(auto_now_add=False,auto_now=True)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	store = models.ForeignKey(Stores,on_delete=models.CASCADE,null=True,blank=True)
+	#store = models.ForeignKey(Stores,on_delete=models.CASCADE,null=True,blank=True)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
 
 
 	objects = VariationManager()
@@ -278,7 +282,9 @@ class Order(models.Model):
 	user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 	#item_ordered =  models.ForeignKey(CartItem,on_delete=models.CASCADE,null=True)
 	#user_profile =  models.ForeignKey(UserProfile,on_delete=models.CASCADE,null=True)
+	delivery_address = models.CharField(max_length=2000,default='',null=False,blank=False)
 	delivery_location = models.CharField(max_length=2000,default='',null=False,blank=False)
+	
 	telephone_number =models.CharField(max_length=16,default='')
 	order_id = models.CharField(max_length=120,default='ABC', unique=True)
 	cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
@@ -288,7 +294,7 @@ class Order(models.Model):
 
 
 	def __str__(self):
-		return "%s, %s" %(self.order_id,self.delivery_location)	
+		return "%s, %s" %(self.order_id,self.status)	
 
 
 

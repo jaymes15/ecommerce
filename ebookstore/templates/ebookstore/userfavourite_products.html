@@ -35,7 +35,7 @@
 		</head>
 		<body>
 		<header>
-			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
 			
 			
 			
@@ -101,7 +101,9 @@
 				</div>
 				{% endfor %}
 			</div>	
-					
+				<div class='pag'>
+			{% include 'ebookstore/paginator.html' with page=product_cat %}		
+			</div>	
 			
 		</div>
 		{% else %}

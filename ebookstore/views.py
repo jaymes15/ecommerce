@@ -1,10 +1,12 @@
 from django.shortcuts import render,redirect,HttpResponseRedirect,get_object_or_404
 from django.views.generic.detail import DetailView
-from .models import Product,Category,Stores,Cart,CartItem,Variation,Order,Comment
+from django.views.generic.edit import UpdateView
+
+from .models import Product,Category,Stores,Cart,CartItem,Variation,Order,Comment,UserProfile
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login,logout
 from django.contrib.auth.models import User
-from .forms import RegistrationForm,EditProfileForm, UserUpdateForm, orderinformation,CommentForm,ComplainForm,SaleontelestaiForm
+from .forms import RegistrationForm,EditProfileForm, UserUpdateForm, orderinformation,CommentForm,ComplainForm,SaleontelestaiForm,PostForm,VariationForm
 
 from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm
 from django.contrib import messages
@@ -16,6 +18,9 @@ import time
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from .utils import id_generator
+from django.views.generic import DeleteView
+from django.urls import reverse_lazy
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 #from django.views.generic.list import ListView 
 # Create your views here.
 
@@ -134,6 +139,7 @@ def carthome(request):
 		'''
 	return render(request,'ebookstore/carthome.html',context)
 
+
 def add_to_cart(request,id):
 	request.session.set_expiry(604800)
 	try:
@@ -143,20 +149,20 @@ def add_to_cart(request,id):
 		   new_cart.save()
 		   request.session['cart_id'] = new_cart.id
 		   the_id = new_cart.id
-	cart = Cart.objects.get(id=the_id)	   
+	cart = Cart.objects.get(id=the_id)
 	try:
 		product = Product.objects.get(id=id)
-	
+
 	except Product.DoesNotExist:
 		pass
 	except:
 		pass
 
-	
+
 	product_var =[] #product variation
 	if request.method == 'POST':
 			qty = request.POST['qty']
-		
+
 			for item in request.POST:
 				key = item
 				val = request.POST[key]
@@ -166,30 +172,28 @@ def add_to_cart(request,id):
 				except:
 					pass
 
-			cart_item = CartItem.objects.create(cart=cart,product=product)	
+			cart_item = CartItem.objects.create(cart=cart,product=product)
 			if len(product_var) > 0:
 				cart_item.variations.add(*product_var)
 
 			for item in cart.cartitem_set.all():
-				store = item.product.Product_store
-				price = item.product.Product_price
+			    store = item.product.user
+			    price = item.product.Product_price
 
 			cart_item.quantity = qty
-			cart_item.store = store
+			cart_item.user = store
 			cart_item.price = price
 			cart_item.save()
-				
+
 			#if	not cart_item in cart.items.all():
 			#	cart.items.add(cart_item)
 			#else:
 				#cart.items.remove(cart_item)
 
-			return HttpResponseRedirect(reverse('ebookstore:carthome'))		
+			return HttpResponseRedirect(reverse('ebookstore:carthome'))
 
 	else:
-		return HttpResponseRedirect(reverse('ebookstore:carthome'))		
-
-
+		return HttpResponseRedirect(reverse('ebookstore:carthome'))
 def remove_from_cart(request,id):
 	try:
 		the_id=request.session['cart_id']
@@ -262,11 +266,17 @@ def remove_from_cart(request,id):
 
 '''
 
+def loginredirect(request):
+	if request.user.is_authenticated():
+		user_groups = request.user.groups.values_list('name', flat=True)
+		if request.user.is_superuser:
+			return HttpResponseRedirect(reverse("admin"))
+		elif "vendor" in user_groups:
+			return HttpResponseRedirect(reverse('ebookstore:vendorhome'))
+		elif not request.user in user_groups:
+			return HttpResponseRedirect(reverse('ebookstore:displaycategory'))		
 
 
-
-
-				
 
 
 class ProductDetail(DetailView):
@@ -293,7 +303,7 @@ class ProductDetail(DetailView):
 
 def display_category(request):
 	cat = Category.objects.all().order_by('name')
-	cate = Stores.objects.all()
+	cate = UserProfile.objects.all()
 	prod = Product.objects.all()
 	query = request.GET.get('q')
 	if query:
@@ -320,20 +330,20 @@ def display_percategory(request,id):
 						   Q(Product_decription=query)
 						   )
 
-	'''	
-	paginator = Paginator(text,24)		
+	
+	paginator = Paginator(text,20)		
 	page = request.GET.get('page')
-	text = paginator.get_page(page)
+	#text = paginator.get_page(page)
 	try:
 		text = paginator.page(page)
 	except PageNotAnInteger:
 			text = paginator.page(1)
 	except EmptyPage:
 			text = paginator.page(paginator.num_page)
- '''
+ 
 
 
-	context = {'product_cat': text,'category':cat,'cot': sub}
+	context = {'product_cat': text,'category':cat,'cot': sub,'page':page}
 	return render(request, 'ebookstore/display_percategory.html', context)
 
 def display_stores(request):
@@ -342,9 +352,9 @@ def display_stores(request):
 	return render(request,'ebookstore/displaystores.html',context)
 
 def display_perstores(request,id):
-	text = Product.objects.filter(Product_store_id=id).order_by('-created_on')
+	text = Product.objects.filter(user_id=id).order_by('-created_on')
 	cat = Category.objects.all()
-	sub =  Stores.objects.filter(id=id)
+	sub =  UserProfile.objects.filter(id=id)
 	query = request.GET.get('q')
 	if query:
 		text = text.filter(Q(Product_name__icontains=query)|
@@ -352,7 +362,17 @@ def display_perstores(request,id):
 						   Q(Product_decription=query)
 						   )
 
-	context = {'product_cat': text,'category':cat,'cot': sub}
+	paginator = Paginator(text,20)		
+	page = request.GET.get('page')
+	#text = paginator.get_page(page)
+	try:
+		text = paginator.page(page)
+	except PageNotAnInteger:
+			text = paginator.page(1)
+	except EmptyPage:
+			text = paginator.page(paginator.num_page)
+
+	context = {'product_cat': text,'category':cat,'cot': sub,'page':page}
 	return render(request, 'ebookstore/display_perstore.html', context)	
 
 
@@ -457,6 +477,7 @@ def checkout(request):
 	try:
 		the_id =request.session['cart_id']
 		cart = Cart.objects.get(id=the_id)
+
 		user = request.user
 	
 
@@ -465,17 +486,25 @@ def checkout(request):
 		return HttpResponseRedirect(reverse('ebookstore:carthome'))
 	try:
 		new_order = Order.objects.get(cart=cart)
+		product =  CartItem.objects.get(cart=cart,product=product)
 		
 	except Order.DoesNotExist:
 		new_order = Order()
 		new_order.cart=cart
-		new_order.delivery_location= user.userprofile.address
+		
+		new_order.delivery_location= user.userprofile.location
+		new_order.delivery_address= user.userprofile.address
 		new_order.telephone_number = user.userprofile.phone_number
 		
 		new_order.user = request.user
 		#new_order.delivery_location = Order.delivery_location 
 		
 		new_order.order_id = str(time.time())
+		
+
+		
+						
+						
 		new_order.save()
 	except:
 		return HttpResponseRedirect(reverse('ebookstore:carthome'))
@@ -516,11 +545,26 @@ def like_products(request):
 			is_liked = True
 	return HttpResponseRedirect(obj.get_absolute_url())
 
+
+	
+@login_required(login_url="/login/")
+
 def userfavourite_products(request):
 	user = request.user
 	favourite_posts = user.favourite.all()
 	cat = Category.objects.all()
-	context ={'favourite_posts':favourite_posts,'category':cat}
+
+
+	paginator = Paginator(favourite_posts,20)		
+	page = request.GET.get('page')
+	#text = paginator.get_page(page)
+	try:
+		favourite_posts = paginator.page(page)
+	except PageNotAnInteger:
+			favourite_posts = paginator.page(1)
+	except EmptyPage:
+			favourite_posts = paginator.page(paginator.num_page)
+	context ={'favourite_posts':favourite_posts,'category':cat,'page':page}
 	return render(request,'ebookstore/userfavourite_products.html',context)
 	
 	#query = request.GET.get('q')
@@ -545,6 +589,7 @@ def userfavourite_products(request):
 	
 
 
+@login_required(login_url="/login/")
 
 def favourite_products(request,id):
 	obj = get_object_or_404(Product,id=id)
@@ -594,4 +639,86 @@ def change_password(request):
 	else:
 		form = PasswordChangeForm(request.user)
 	return render(request, 'ebookstore/password_change.html',{'form': form,'category':cat})
+
+@login_required(login_url="/login/")
+def	add_post(request):
+	
+	if request.method =='POST':
+		a_form = PostForm(request.POST,request.FILES)
+		
+		if a_form.is_valid():
+
+
+			#save to db
+			product= a_form.save(commit=False)
+			product.user = request.user
+			
+			product.save()
+			return redirect('ebookstore:displaycategory')
+	else:
+		a_form =  PostForm()
+				
+		return render(request, 'ebookstore/post_form.html',{ 'a_form':a_form })
+
+@login_required(login_url="/login/")
+def postbyuser(request,user_id):
+	user =	 Product.objects.filter(user_id=user_id)
+
+	
+	context = {'user': user}
+	return render(request, 'ebookstore/userprofile_form.html', context)		
+
+class ProductUpdate(UpdateView): 
+	model = Product
+	fields = ['Product_name','Product_decription','Product_image','Product_image1','Product_image2','Product_image3','Product_image4','Product_category']	
+
+class ProductDelete(DeleteView):
+	model = Product 
+	success_url = reverse_lazy('ebookstore:userprofile')	
+@login_required(login_url="/login/")
+def	add_variation(request,id):
+	product = get_object_or_404(Product,id=id)
+	if request.method =='POST':
+		a_form = VariationForm(request.POST,request.FILES)
+		
+		if a_form.is_valid():
+			com= a_form.save(commit=False)
+			com.product = product
+			com.save()
+			return redirect('ebookstore:product_detail',pk=id)
+	else:
+		a_form =  VariationForm()
+		return render(request, 'ebookstore/addvariation.html',{ 'a_form':a_form })	
+
+@login_required(login_url="/login/")
+
+def orders(request):
+	order = Order.objects.all().order_by('-timestamp')
+	query = request.GET.get('q')
+	if query:
+		order = order.filter(Q(status__icontains=query)|
+						   Q(order_id__icontains=query)
+						  
+						   )
+	context = {'order':order}
+	return render(request, 'ebookstore/orders.html',context)
+
+
+
+
+
+class OrderDetail(DetailView):
+	model = Order
+	template_name = "ebookstore/orderdetail.html"
+
+@login_required(login_url="/login/")
+
+def orderedcart(request,id):
+	sub =  Cart.objects.get(id=id)
+	context = {'sub':sub}
+	return render(request,'ebookstore/orderedcart.html',context)
+
+
+
+
 

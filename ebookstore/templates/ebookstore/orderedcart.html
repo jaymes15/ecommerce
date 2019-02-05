@@ -1,0 +1,136 @@
+
+
+	  	 
+	  	
+
+
+
+
+
+
+
+
+
+
+
+{% load static from staticfiles %} 
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'ebookstore/home.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+					  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'ebookstore/bootstrap.min.css' %}">
+									
+									
+									<script>
+					function openNav() {
+						document.getElementById("mySidenav").style.width = "250px";
+					}
+
+					function closeNav() {
+						document.getElementById("mySidenav").style.width = "0";
+					}
+					
+										var slideIndex = 1;
+					showSlides(slideIndex);
+					</script>
+		</head>
+		<body>
+		<header>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
+			
+			
+			
+			<div id="mySidenav" class="sidenav">
+					  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+					 <h1> <a href="{% url 'ebookstore:displaycategory' %}">HOME</a></h1>
+			
+			
+			
+			
+			</div>
+
+			
+			<div class='cart'>
+			<a href="{% url 'ebookstore:Salesrequest' %}"><i class="fas fa-store-alt las"></i></a>
+			<a href="{% url 'ebookstore:userfavourite_products' %}"><i class="fas fa-heart lg"></i></a>		
+			<a href="{% url 'ebookstore:userprofile' %}"><i class="fas fa-user lgr"></i></a>
+			
+			<a href="{% url 'ebookstore:carthome' %}"><i class="fas fa-shopping-cart las"></i></a>
+			<a href="{% url 'ebookstore:complain' %}"  ><i class="fas fa-headset lg"></i></a>	
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		</header>
+		<hr />
+		<div class='container'>
+			
+		<h1>Cart id:{{ sub.id }}</h1>
+		<hr/>
+
+<h1>Total:<br/>{{ sub.total }}</h1>
+<hr/>
+{% for pro in sub.cartitem_set.all %}
+<h2>product:<br/>{{ pro.product }}</h2>
+<hr/>
+<h2>Price:<br/>{{ pro.price  }}</h2>
+<hr/>
+<h2>Quantity:<br/>{{ pro.quantity }}</h2>
+<hr/>
+<h2>Store:<br/>{{ pro.user }}</h2>
+<hr/>
+<h2>Variations:<br/></h2>
+
+{% if pro.variations.all %}
+	<ul>
+					{% for subitem in pro.variations.all %}
+					<li>
+						{{ subitem.category|capfirst }} : {{ subitem.title|capfirst }}
+					</li>
+					{% endfor %}	
+				</ul>
+
+			{% endif %}
+
+
+<hr/>
+
+
+{% endfor %}
+	  	  	
+
+		</div>	
+		
+		
+	</div>	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</body>
+</html>		
+
+			  	  
+
+

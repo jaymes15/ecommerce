@@ -1,0 +1,102 @@
+
+
+
+
+
+
+
+
+
+{% load static from staticfiles %} 
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'ebookstore/home.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+					  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'ebookstore/bootstrap.min.css' %}">
+									
+									
+									<script>
+					function openNav() {
+						document.getElementById("mySidenav").style.width = "250px";
+					}
+
+					function closeNav() {
+						document.getElementById("mySidenav").style.width = "0";
+					}
+					
+										var slideIndex = 1;
+					showSlides(slideIndex);
+					</script>
+		</head>
+		<body>
+		<header>
+			<h1>&#9776; ELIXIR</h1>
+			
+			
+			
+			
+			<div class="search-box">
+				
+			</div>
+
+			
+			<div class='cart'>
+			<a href="{% url 'ebookstore:Salesrequest' %}"><i class="fas fa-store-alt las"></i></a>
+			<a href="{% url 'ebookstore:userfavourite_products' %}"><i class="fas fa-heart lg"></i></a>		
+			<a href="{% url 'ebookstore:userprofile' %}"><i class="fas fa-user lgr"></i></a>
+			
+			<a href="{% url 'ebookstore:carthome' %}"><i class="fas fa-shopping-cart las"></i></a>
+			<a href="{% url 'ebookstore:complain' %}"  ><i class="fas fa-headset lg"></i></a>	
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		</header>
+		<hr />
+		<div class='container'>
+			<h1>Upload product</h1>
+				<form action="{% url 'ebookstore:create' %}" method="POST" enctype="multipart/form-data">
+				<div class='form-group'>
+
+  				{% csrf_token %}
+  		 
+			   {{ a_form.as_p }} 
+			    
+			  
+			  
+ <button type='submit' class='btn btn-success log'><h4>Upload Product</h4></button>
+
+</form>
+
+
+		</div>	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</body>
+</html>		

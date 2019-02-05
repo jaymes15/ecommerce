@@ -43,7 +43,7 @@
 		</head>
 		<body>
 		<header>
-			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
 			
 			
 			
@@ -109,7 +109,16 @@
 							<a href="{% url 'ebookstore:change_password'  %}"><h4><button type='button' class='btn btn-success'>
 									Change password
 							</button></a>
-							 
+							{% if request.user.is_staff %}	
+							<a href="{% url 'ebookstore:create'  %}"><h4><button type='button' class='btn btn-success'>
+									Upload Product
+							</button></h4></a>
+							<a href="{% url 'ebookstore:postbyuser' user.id %}"><h4><button type='button' class='btn btn-success'>user activities</button></h4></a>
+							
+							{% endif %}
+							{% if request.user.is_superuser %}
+							<a href="{% url 'ebookstore:orders'  %}"><h4><button type='button' class='btn btn-success'>orders</button></h4></a>
+							{% endif %}
 							 <form action="{% url 'ebookstore:logout' %}" method='POST'>
 										{% csrf_token %}
 								<h4><button type='submit' class='btn btn-warning'>LOGOUT</button></p>

@@ -38,7 +38,7 @@
 			
 		<header>
 			
-			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
 			
 			
 			
@@ -61,8 +61,10 @@
 			
 			<div class='cart'>
 			<a href="{% url 'ebookstore:Salesrequest' %}"><i class="fas fa-store-alt las"></i></a>
-			<a href="{% url 'ebookstore:userfavourite_products' %}"><i class="fas fa-heart lg"></i></a>		
+			<a href="{% url 'ebookstore:userfavourite_products' %}"><i class="fas fa-heart lg"></i></a>
+				
 			<a href="{% url 'ebookstore:userprofile' %}"><i class="fas fa-user lgr"></i></a>
+			
 			
 			<a href="{% url 'ebookstore:carthome' %}"><i class="fas fa-shopping-cart las"></i></a>
 			<a href="{% url 'ebookstore:complain' %}"  ><i class="fas fa-headset lg"></i></a>	
@@ -86,19 +88,20 @@
 		
 		<div class='container'>
 
-		
+		{% for store in stores %}
 			<div class='row'>
-				{% for store in stores %}
+				
 		
-				<div class='col-xs-3 lar'>
-					{% if store.Store_logo %}
-				<a href='{% url "ebookstore:display_perstore" store.id %}'><img src='{{ store.Store_logo.url}}' class='img-rounded pic' /></a>
+				<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+					{% if store.image %}
+				<a href='{% url "ebookstore:display_perstore" store.id %}'><img src='{{ store.image.url}}' class='img-rounded pic' /></a>
 					{% endif %}
 						
 						
 				</div>
-				{% endfor %}
+				
 			</div>
+			{% endfor %}
 					
 			
 				
@@ -113,10 +116,10 @@
 			
 			<div class='row'>
 				{% for pro in categories.product_set.all|dictsortreversed:"created_on"|slice:":4" %}
-				<div class='col-sm-3'>
+				<div class='col-xs-5 col-sm-4 col-md-3 col-lg-3'>
 				<img src='{{ pro.Product_image.url}}' class='img-rounded pic1' />
-					<h2>{{ pro.Product_name }}</h2>
-						<h3>&#8358;{{ pro.Product_price}}</h3>
+					<h4><b>{{ pro.Product_name }}</b></h4>
+						<h4>&#8358;{{ pro.Product_price}}</h4>
 						<h4>{{ pro.Product_store}}</h4>
 						
 						<a href='{% url "ebookstore:product_detail" pro.id %}'><h4><button type='button' class='btn btn-success hit'>

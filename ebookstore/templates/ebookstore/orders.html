@@ -1,0 +1,132 @@
+
+
+
+
+
+
+
+
+
+
+{% load static from staticfiles %} 
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'ebookstore/cat.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+					  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'ebookstore/bootstrap.min.css' %}">
+									
+									
+									<script>
+					function openNav() {
+						document.getElementById("mySidenav").style.width = "250px";
+					}
+
+					function closeNav() {
+						document.getElementById("mySidenav").style.width = "0";
+					}
+					
+										var slideIndex = 1;
+					showSlides(slideIndex);
+					</script>
+		</head>
+		<body>
+		<header>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
+			<div class="search-box">
+				<form method ='GET' action=''>
+					<p><input type="text" class="search-text"  placeholder="search for Products,brands and categories..." name="q" value= "{{ request.GET.q }}" > 
+				<input type="submit" value="search" class='searchbtn'></p>
+			</form>
+			</div>
+			
+			
+			
+			<div id="mySidenav" class="sidenav">
+					  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+					 <h1> <a href="{% url 'ebookstore:displaycategory' %}">HOME</a></h1>
+			
+			
+			
+			
+			
+
+			
+			<div class='cart'>
+			<a href="{% url 'ebookstore:Salesrequest' %}"><i class="fas fa-store-alt las"></i></a>
+			<a href="{% url 'ebookstore:userfavourite_products' %}"><i class="fas fa-heart lg"></i></a>		
+			<a href="{% url 'ebookstore:userprofile' %}"><i class="fas fa-user lgr"></i></a>
+			
+			<a href="{% url 'ebookstore:carthome' %}"><i class="fas fa-shopping-cart las"></i></a>
+			<a href="{% url 'ebookstore:complain' %}"  ><i class="fas fa-headset lg"></i></a>	
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		</header>
+		<hr />
+		
+			{% if order %}
+
+		<div class='container'>
+			<h3 align="center">Total orders: {{ order.count }}<h3>
+			<div class='row justify-content-md-center'>
+				{% for post in order %}
+				<div class='col-sm-3 con'>
+					<ul>
+				
+			<a href="{% url 'ebookstore:orderdetail' post.id %}">		<h3>{{post.order_id}}</h3></a>
+						
+						<p>{{ post.status}}</p>
+						
+				 <p>{{ post.timestamp  }}</p>
+					</ul>	
+					<hr/>
+				</div>
+				
+				{% endfor %}	
+						
+						
+			</div>			
+		</div>
+
+				
+			
+			
+		{% else %}
+			<h1>No orders</h1>
+		{% endif %}	
+
+
+		</div>	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</body>
+</html>		
+
+		

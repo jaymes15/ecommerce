@@ -36,7 +36,7 @@
 		</head>
 		<body>
 		<header>
-			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
 			
 			
 			
@@ -95,7 +95,7 @@
 {% for item in bas.cartitem_set.all %}
 <tr>
 <td><h4 ><b>{{ item.product }}</b></h4>
-<h4>{{ item.product.Product_store }}</h4>
+<h4>{{ item.product.user }}</h4>
 {% if item.variations.all %}
 	<ul>
 					{% for subitem in item.variations.all %}

@@ -35,7 +35,7 @@
 		</head>
 		<body>
 		<header>
-			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
 			
 			
 			
@@ -78,26 +78,28 @@
 		<div class='container'>
 				{% for sub in cot %}
 
-		<h1><span style=" color:blue" >{{ sub.Store_name|capfirst }}</span></h1>
-		<div class="ful">
-		<img src='{{ sub.Store_logo.url}}' class='img-rounded pic3' />
+		<h3><span style=" color:blue" >{{ sub.user|capfirst }}</span></h3>
+		<div class=' ful'>
+		<img src='{{ sub.image.url}}' class='img-rounded pic3' />
+	</div>
+		{% endfor %}
 	</div>
 
-		{% endfor %}
 		
-	</div>
-	<hr/>
+		
+	
+	
 
 		<div class='container'>
 			
 			<div class='row'>
 				{% for product in product_cat %}
-				<div class='col-sm-3'>
+				<div class='col-xs-5 col-sm-4 col-md-3 col-lg-3 ask'>
 				
 					<img src='{{ product.Product_image.url}}' class='img-rounded pic1' />
-						<h3 >{{ product.Product_name}}</h3>
-							<h3>&#8358;{{ product.Product_price}}</h3>
-							<h4>{{ product.Product_store}}</h4>
+						<h4 ><b>{{ product.Product_name}}<b></h4>
+							<h4>&#8358;{{ product.Product_price}}</h4>
+							
 							
 							<a href='{% url "ebookstore:product_detail" product.id %}'><h4><button type='button' class='btn btn-success'>
 								<span style=" color:white" >view  details</span>
@@ -107,7 +109,9 @@
 				</div>
 				{% endfor %}
 			</div>	
-					
+					<div class='pag'>
+			{% include 'ebookstore/paginator.html' with page=product_cat %}		
+			</div>
 			
 		</div>
 

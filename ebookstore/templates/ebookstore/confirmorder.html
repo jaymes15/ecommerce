@@ -33,11 +33,37 @@
 					
 										var slideIndex = 1;
 					showSlides(slideIndex);
-					</script>
+
+				  function payWithPaystack(){
+				    var handler = PaystackPop.setup({
+				      key: 'pk_test_1ae21e3c162a5687048938e7b4afad6ab72180a4',
+				      email: '{{ user.email}}',
+				      amount: {{ bas.total }}+"00",
+				     
+				      metadata: {
+				         custom_fields: [
+				            {
+				            	
+				                display_name: "Mobile Number",
+				                variable_name: "mobile_number",
+				                value: "{{ user.userprofile.phone_number }}"
+				            }
+				         ]
+				      },
+				      callback: function(response){
+				          alert('success. transaction ref is ' + response.reference);
+				      },
+				      onClose: function(){
+				          alert('window closed');
+				      }
+				    });
+				    handler.openIframe();
+				  }
+			</script>
 		</head>
 		<body>
 		<header>
-			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>Telestai</h1>
+			<h1><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>ELIXIR</h1>
 			
 			
 			
@@ -82,6 +108,7 @@
 							<h3>phone number:{{ user.userprofile.phone_number }}</h3>
 							
 							<h3>delivery address:{{ user.userprofile.address }}</h3>
+							<h3>delivery location:{{ user.userprofile.location }}</h3>
 							
 
 						    {% if user.userprofile.age %}
@@ -126,7 +153,7 @@
 {% for item in bas.cartitem_set.all %}
 <tr>
 <td><h4 ><b>{{ item.product }}</b></h4>
-<h4>{{ item.product.Product_store }}</h4>
+<h4>{{ item.product.user }}</h4>
 {% if item.variations.all %}
 	<ul>
 					{% for subitem in item.variations.all %}
@@ -148,13 +175,18 @@
 </table>
 					<div class="enter">
 					<h4>TOTAL:&#8358;{{ bas.total }}</h4>
-								<a href="{% url 'ebookstore:displaycategory' %}"><h4><button type='button' class='btn btn-warning'>
-															<span style=" color:white" >Continue Shopping</span>
-														</button></a>
-														<a href="{% url 'ebookstore:checkout' %}"><button type='button' class='btn btn-success'>
+					<form>
+						<script src="https://js.paystack.co/v1/inline.js"></script>		
+						<button type="button" onclick="payWithPaystack()" class='btn btn-warning'> Pay then Order </button> 
+								
+													<a href="{% url 'ebookstore:checkout' %}"><button type='button' class='btn btn-success'>
 															<span style=" color:white" >place your order</span>
 														</button></a>
 								</h4>
+									  
+									 
+							</form>	
+
 					</div>							
 	{% endif %}
 

@@ -1,6 +1,6 @@
 from django import forms
-from .models import UserProfile,Order, Comment,Complain,Saleontelestai
-from django.contrib.auth.models import User
+from .models import UserProfile,Order, Comment,Complain,Saleontelestai,Product,Variation
+from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm 
 
 
@@ -20,6 +20,7 @@ class RegistrationForm(UserCreationForm):
 
 
 	        	}))
+	
 
 	class Meta:
 		model = User
@@ -30,7 +31,9 @@ class RegistrationForm(UserCreationForm):
 			'email',
 			'password1',
 			'password2'
-			) 
+			)
+
+	
 	def save(self,commit = True):
 		user = super(RegistrationForm,self).save(commit = False)
 		user.first_name = self.cleaned_data['first_name']
@@ -38,7 +41,15 @@ class RegistrationForm(UserCreationForm):
 		user.email = self.cleaned_data['email']
 
 		if commit:
-			user.save()
+			user.save()  		
+
+		 
+
+	
+
+
+
+	
 class EditProfileForm(forms.ModelForm):
 	 email = forms.CharField(widget=forms.TextInput(
 	        	attrs={
@@ -60,6 +71,8 @@ class EditProfileForm(forms.ModelForm):
 
 
 	        	}))
+	 
+	 
 	 class Meta:
 	 	model = User
 	 	fields = [
@@ -68,6 +81,13 @@ class EditProfileForm(forms.ModelForm):
 					'last_name',
 					
 					]
+	 				
+
+	
+
+
+
+
 class UserUpdateForm(forms.ModelForm):
 	
 
@@ -89,12 +109,20 @@ class UserUpdateForm(forms.ModelForm):
 
 
 	        	}))
+	location =  forms.CharField(widget=forms.TextInput(
+	        	attrs={
+	        			'class':'form-control',
+
+
+	        	}))
 	phone_number = forms.CharField(widget=forms.TextInput(
 	        	attrs={
 	        			'class':'form-control',
 
 
 	        	}))
+	
+
 
 	
 	
@@ -110,15 +138,18 @@ class UserUpdateForm(forms.ModelForm):
 			'age',
 			'city',
 			'address',
+			'location',
 			'phone_number'
 			
 	]
+	
+	
 
 class orderinformation(forms.ModelForm):
 	class Meta:
 		model = Order
 		fields = [
-			'delivery_location',
+			'delivery_location','delivery_address',
 
 			]
 
@@ -211,4 +242,36 @@ class SaleontelestaiForm(forms.ModelForm):
  		model = Saleontelestai 
  		fields = ['name','address','telephone_number','email','store_name','product_category']	
 
-				
+class PostForm(forms.ModelForm):
+	
+
+	       Product_name = forms.CharField(widget=forms.TextInput(
+	        	attrs={
+	        			'class':'form-control',
+
+
+	        	}))
+	      
+	       Product_decription  =  forms.CharField(widget=forms.Textarea(
+	        	attrs={
+	        			'class':'form-control',
+
+
+	        	}))
+	     
+	       class Meta:
+	        	model = Product
+	        	exclude = ['created_on','user','Product_store','favourite','likes']
+class VariationForm(forms.ModelForm):
+	
+
+	      title= forms.CharField(widget=forms.TextInput(
+	        	attrs={
+	        			'class':'form-control',
+
+
+	        	}))
+	      
+	      class Meta:
+	        	model = Variation
+	        	fields = ['category','title']	        					
